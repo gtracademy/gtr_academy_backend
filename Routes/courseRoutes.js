@@ -1,10 +1,11 @@
 const express = require('express');
 const CourseForm = require('../Models/courseFormModel');
 const router = express.Router();
+const adminAuth = require('../Middlewares/authMiddleware')
 
 
 // Show Course Page
-router.get('/course', async (req, res) => {
+router.get('/course', adminAuth,async (req, res) => {
     res.render('course');
 });
 

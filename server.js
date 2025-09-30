@@ -13,6 +13,7 @@ const addCourseRoutes = require('./Routes/addCourseRoutes')
 const mentorRoutes = require('./Routes/mentorRoutes')
 const userRoutes = require('./Routes/userRoute')
 const methodOverride = require('method-override')
+const session = require('express-session');
 
 
 
@@ -31,6 +32,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'))
 app.use('/uploads', express.static('uploads'))
 app.use(json())
+app.use(session({
+  secret: 'secret', // change to something strong
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // set to true if using HTTPS
+}));
 
 
 
@@ -40,6 +47,7 @@ app.use('/', homeRoutes)
 app.use('/course',addCourseRoutes)
 app.use('/user', userRoutes)
 app.use('/mentor',mentorRoutes)
+
 
 
 // Connect to Server

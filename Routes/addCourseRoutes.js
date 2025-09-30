@@ -6,6 +6,7 @@ const { v2: cloudinary } = require('cloudinary');
 const Course = require('../Models/courseModel');
 const Mentor = require('../Models/mentorModel');
 require('dotenv').config();
+const adminAuth = require('../Middlewares/authMiddleware')
 
 const router = express.Router();
 
@@ -49,7 +50,7 @@ const slugify = (text) => {
 // ------------------------
 
 // Render Add Course Form
-router.get('/', async (req, res) => {
+router.get('/', adminAuth, async (req, res) => {
   const mentors = await Mentor.find({});
   const categories = ["SAP", "Data", "Other"]; // predefined categories
   res.render('courseAdd', { mentors, categories });
@@ -101,7 +102,7 @@ router.post('/submit-form-course', upload.single('courseImage'), async (req, res
         // It's an object like: { title: "...", details: "..." }
         parsedCurriculum.push({
           title: curriculumData.title,
-          details: curriculumData.details,
+          details: curriculumData.details, 
         });
       } else {
         // Multiple curriculum entries: each is { title, details }

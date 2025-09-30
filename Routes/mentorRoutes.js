@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const { v2: cloudinary } = require('cloudinary');
 require('dotenv').config();
+const adminAuth = require('../Middlewares/authMiddleware')
 
 const router = express.Router();
 
@@ -93,7 +94,7 @@ router.post('/add', upload.single("photo"), async (req, res) => {
 // });
 
 // GET Edit Mentor Form
-router.get('/edit/:id', async (req, res) => {
+router.get('/edit/:id', adminAuth, async (req, res) => {
   try {
     const mentor = await mentorModel.findById(req.params.id);
     if (!mentor) return res.status(404).send("Mentor not found");
@@ -133,7 +134,7 @@ router.post('/edit/:id', upload.single("photo"), async (req, res) => {
 });
 
 // DELETE Mentor
-router.post('/delete/:id', async (req, res) => {
+router.post('/delete/:id', adminAuth, async (req, res) => {
   try {
     await mentorModel.findByIdAndDelete(req.params.id);
     res.redirect("/mentor");

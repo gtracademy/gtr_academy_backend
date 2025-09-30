@@ -1,20 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const courseModel = require('../Models/courseModel');
+const adminAuth = require('../Middlewares/authMiddleware')
 
 // Import the HomeForm model
 const HomeForm = require('../Models/homeFormModel');
 
 
 // Show Home Page 
-router.get("/",async(req,res)=>{
+router.get("/",adminAuth, async (req, res) => {
     const course = await courseModel.find();
-  res.render('adminHome',{course})
+    res.render('adminHome', { course })
 })
 
 
 // Route to handle form submission
-router.post('/submit-form-enquiry', async (req, res)=> {
+router.post('/submit-form-enquiry', async (req, res) => {
     try {
         const { name, phone } = req.body;
 
@@ -26,7 +27,7 @@ router.post('/submit-form-enquiry', async (req, res)=> {
         console.error('Error submitting form:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
-}) 
+})
 
 
 

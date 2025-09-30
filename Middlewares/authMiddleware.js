@@ -1,7 +1,9 @@
-exports.ensureAdmin = (req, res, next) => {
-  if (req.session && req.session.adminId) {
+function adminAuth(req, res, next) {
+  if (req.session && req.session.isAdmin) {
     next();
   } else {
-    res.redirect('/admin/login');
+    res.redirect('/user/login'); // redirect to login if not authenticated
   }
-};
+}
+
+module.exports = adminAuth;
