@@ -1,19 +1,34 @@
 const mongoose = require('mongoose');
 
 const courseSchema = new mongoose.Schema({
-    courseTitle: { type: String, },
-    courseBrochure: { type: String, },
-    courseDemoVideo: { type: String, },
-    courseImage: { type: String, },
-    courseDescription: { type: String, },
-    courseDuration: { type: String, },
-    courseMentorPhoto: { type: String, },
-    courseMentorDescription: { type: String, },
-    courseCurriculum: { type: String, },
-    coursePrice: { type: Number, },
-    courseDiscount: { type: Number, },
-    courseCategory: { type: String, },
-})
+    courseTitle: { type: String, required: true },
+    courseBrochure: { type: String },
+    courseDemoVideo: { type: String },
+    courseDescription: { type: String },
+    courseDuration: { type: String },
+    courseCurriculum: { type: String },
+    courseUrl: { type: String, }, 
+    coursePrice: {
+        online: { type: Number, required: true },   
+        offline: { type: Number, required: true }   
+    },
+    courseDiscount: {
+        online: { type: Number, default: 0 },  
+        offline: { type: Number, default: 0 }   
+    },
+    courseCategory: { type: String },
+    courseImage: {
+        local: String,
+        cloud: String
+    },
+    mentor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Mentor",
+        required: true
+    }
+});
 
-const Course = mongoose.model('HomeForm', courseSchema);
+const Course = mongoose.model("Course", courseSchema);
 module.exports = Course;
+
+

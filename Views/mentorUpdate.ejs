@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Mentor - GTR Academy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-lg">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">
+      Edit Mentor
+    </h1>
+
+    <form 
+      action="/mentor/edit/<%= mentor._id %>" 
+      method="POST"
+      enctype="multipart/form-data"
+      class="space-y-4"
+    >
+      <!-- Name -->
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+        <input id="name" name="name" type="text" required 
+          value="<%= mentor.name %>"
+          class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
+        />
+      </div>
+
+      <!-- Designation -->
+      <div>
+        <label for="designation" class="block text-sm font-medium text-gray-700">Designation</label>
+        <input id="designation" name="designation" type="text" 
+          value="<%= mentor.designation %>"
+          class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
+        />
+      </div>
+
+      <!-- Photo -->
+      <div>
+        <label for="photo" class="block text-sm font-medium text-gray-700">Photo (Upload New)</label>
+        <input id="photo" name="photo" type="file"
+          class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
+        />
+        <% if (mentor.photo) { %>
+          <img src="<%= mentor.photo %>" alt="Current Photo" class="mt-2 w-24 h-24 rounded-full object-cover border border-gray-300">
+        <% } %>
+      </div>
+
+      <!-- Bio -->
+      <div>
+        <label for="bio" class="block text-sm font-medium text-gray-700">Bio</label>
+        <textarea id="bio" name="bio" rows="4"
+          class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"><%= mentor.bio %></textarea>
+      </div>
+
+      <!-- Submit -->
+      <div class="flex justify-between items-center">
+        <button type="submit"
+          class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+          Update Mentor
+        </button>
+        <a href="/mentor" class="text-gray-600 hover:text-gray-900">Cancel</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

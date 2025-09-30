@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Update Course</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #e0f7fa, #f8f9fa);
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .form-wrapper {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    h2 {
+      color: #007bff;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <%- include('Header'); -%>
+
+    <div class="container">
+      <div class="form-wrapper">
+        <h2>Update Course</h2>
+        <form action="/course/update/<%= Course._id %>" method="POST" enctype="multipart/form-data">
+          <div class="row">
+
+            <!-- Title -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Course Title</label>
+              <input type="text" name="courseTitle" class="form-control" value="<%= Course.courseTitle %>" required>
+            </div>
+
+            <!-- Slug -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Course Slug (URL)</label>
+              <input type="text" name="courseSlug" class="form-control" value="<%= Course.courseUrl %>"
+                placeholder="e.g., full-stack-development" required>
+              <small class="text-muted">This slug is used in the course URL.</small>
+            </div>
+
+
+            <!-- Brochure -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Brochure URL</label>
+              <input type="text" name="courseBrochure" class="form-control" value="<%= Course.courseBrochure %>">
+            </div>
+
+            <!-- Demo Video -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Demo Video URL</label>
+              <input type="text" name="courseDemoVideo" class="form-control" value="<%= Course.courseDemoVideo %>">
+            </div>
+
+            <!-- Image -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Course Image</label><br>
+              <% if (Course.courseImage && Course.courseImage.cloud) { %>
+                <img src="<%= Course.courseImage.cloud %>" alt="Course Image" width="100" class="mb-2">
+                <% } %>
+                  <input type="file" name="courseImage" class="form-control" accept="image/*">
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3 col-md-12">
+              <label class="form-label">Course Description</label>
+              <textarea name="courseDescription" class="form-control"
+                rows="3"><%= Course.courseDescription %></textarea>
+            </div>
+
+            <!-- Duration -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Duration</label>
+              <input type="text" name="courseDuration" class="form-control" value="<%= Course.courseDuration %>">
+            </div>
+
+            <!-- Mentor -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Choose Mentor</label>
+              <select name="mentor" class="form-control" required>
+                <% if (Course.mentor) { %>
+                  <option value="<%= Course.mentor._id || Course.mentor %>" selected>
+                    <%= Course.mentor.name || '' %> - <%= Course.mentor.designation || '' %>
+                  </option>
+                  <% } else { %>
+                    <option value="">-- Choose Mentor --</option>
+                    <% } %>
+                      <% mentors.forEach(function(mentor) { %>
+                        <% if (!Course.mentor || Course.mentor.toString() !==mentor._id.toString()) { %>
+                          <option value="<%= mentor._id %>">
+                            <%= mentor.name %> - <%= mentor.designation %>
+                          </option>
+                          <% } %>
+                            <% }) %>
+              </select>
+            </div>
+
+            <!-- Curriculum -->
+            <div class="mb-3 col-md-12">
+              <label class="form-label">Course Curriculum</label>
+              <textarea name="courseCurriculum" class="form-control" rows="3"><%= Course.courseCurriculum %></textarea>
+            </div>
+
+            <!-- Pricing -->
+            <h5 class="mt-4 mb-2 text-primary">Pricing & Discounts</h5>
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Online Price (₹)</label>
+              <input type="number" name="coursePrice[online]" class="form-control"
+                value="<%= Course.coursePrice ? Course.coursePrice.online : '' %>">
+            </div>
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Offline Price (₹)</label>
+              <input type="number" name="coursePrice[offline]" class="form-control"
+                value="<%= Course.coursePrice ? Course.coursePrice.offline : '' %>">
+            </div>
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Online Discount (₹) </label>
+              <input type="number" name="courseDiscount[online]" class="form-control"
+                value="<%= Course.courseDiscount ? Course.courseDiscount.online : 0 %>">
+            </div>
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Offline Discount (₹)</label>
+              <input type="number" name="courseDiscount[offline]" class="form-control"
+                value="<%= Course.courseDiscount ? Course.courseDiscount.offline : 0 %>">
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3 col-md-12">
+              <label class="form-label">Course Category</label>
+              <input type="text" name="courseCategory" class="form-control" value="<%= Course.courseCategory %>">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">Update Course</button>
+        </form>
+      </div>
+    </div>
+</body>
+
+</html>

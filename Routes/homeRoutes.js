@@ -5,6 +5,14 @@ const courseModel = require('../Models/courseModel');
 // Import the HomeForm model
 const HomeForm = require('../Models/homeFormModel');
 
+
+// Show Home Page 
+router.get("/",async(req,res)=>{
+    const course = await courseModel.find();
+  res.render('adminHome',{course})
+})
+
+
 // Route to handle form submission
 router.post('/submit-form-enquiry', async (req, res)=> {
     try {
@@ -19,5 +27,7 @@ router.post('/submit-form-enquiry', async (req, res)=> {
         res.status(500).json({ message: 'Internal server error' });
     }
 }) 
+
+
 
 module.exports = router;
