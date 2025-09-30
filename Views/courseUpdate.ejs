@@ -122,10 +122,40 @@
             </div>
 
             <!-- Curriculum -->
-            <div class="mb-3 col-md-12">
-              <label class="form-label">Course Curriculum</label>
-              <textarea name="courseCurriculum" class="form-control" rows="3"><%= Course.courseCurriculum %></textarea>
-            </div>
+<div class="mb-3 col-md-12">
+  <label class="form-label">Course Curriculum</label>
+  <div id="curriculum-container">
+    <% if (Course.courseCurriculum && Course.courseCurriculum.length > 0) { %>
+      <% Course.courseCurriculum.forEach((item, index) => { %>
+        <div class="border p-3 mb-3 rounded curriculum-item">
+          <div class="mb-2">
+            <label>Title</label>
+            <input type="text" name="courseCurriculum[<%= index %>][title]" class="form-control" value="<%= item.title %>" required>
+          </div>
+          <div class="mb-2">
+            <label>Details</label>
+            <textarea name="courseCurriculum[<%= index %>][details]" class="form-control" rows="2" required><%= item.details %></textarea>
+          </div>
+          <button type="button" class="btn btn-sm btn-danger remove-curriculum">Remove</button>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="border p-3 mb-3 rounded curriculum-item">
+        <div class="mb-2">
+          <label>Title</label>
+          <input type="text" name="courseCurriculum[0][title]" class="form-control" required>
+        </div>
+        <div class="mb-2">
+          <label>Details</label>
+          <textarea name="courseCurriculum[0][details]" class="form-control" rows="2" required></textarea>
+        </div>
+        <button type="button" class="btn btn-sm btn-danger remove-curriculum">Remove</button>
+      </div>
+    <% } %>
+  </div>
+  <button type="button" id="add-curriculum" class="btn btn-outline-primary">+ Add Curriculum Section</button>
+</div>
+
 
             <!-- Pricing -->
             <h5 class="mt-4 mb-2 text-primary">Pricing & Discounts</h5>
@@ -161,6 +191,40 @@
         </form>
       </div>
     </div>
+
+
+
+    <script>
+  let curriculumIndex = <%= Course.courseCurriculum ? Course.courseCurriculum.length : 1 %>;
+
+  document.getElementById('add-curriculum').addEventListener('click', () => {
+    const container = document.getElementById('curriculum-container');
+
+    const newItem = document.createElement('div');
+    newItem.classList.add('border', 'p-3', 'mb-3', 'rounded', 'curriculum-item');
+    newItem.innerHTML = `
+      <div class="mb-2">
+        <label>Title</label>
+        <input type="text" name="courseCurriculum[${curriculumIndex}][title]" class="form-control" required>
+      </div>
+      <div class="mb-2">
+        <label>Details</label>
+        <textarea name="courseCurriculum[${curriculumIndex}][details]" class="form-control" rows="2" required></textarea>
+      </div>
+      <button type="button" class="btn btn-sm btn-danger remove-curriculum">Remove</button>
+    `;
+
+    container.appendChild(newItem);
+    curriculumIndex++;
+  });
+
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('remove-curriculum')) {
+      e.target.closest('.curriculum-item').remove();
+    }
+  });
+</script>
+
 </body>
 
 </html>

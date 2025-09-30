@@ -67,7 +67,7 @@ router.post('/submit-form-course', upload.single('courseImage'), async (req, res
     if (courseImageLocalPath) {
       const result = await cloudinary.uploader.upload(courseImageLocalPath, { folder: 'Courses' });
       cloudCourseImage = result.secure_url;
-      fs.unlinkSync(courseImageLocalPath);
+      fs.unlinkSync(courseImageLocalPath); // delete from local
     }
 
     // Determine category
@@ -88,10 +88,31 @@ router.post('/submit-form-course', upload.single('courseImage'), async (req, res
       courseSlug = slugify(req.body.courseTitle);
     }
 
-    // Avoid duplicate URLs by appending timestamp if needed
+    // Avoid duplicate URLs by appending timestamp
     courseSlug += '-' + Date.now();
 
-    // Create new course
+    // ✅ Parse dynamic curriculum input
+    let parsedCurriculum = [];
+    if (req.body.courseCurriculum) {
+      const curriculumData = req.body.courseCurriculum;
+
+      // If there's only one curriculum entry, convert it to an array
+      if (!Array.isArray(curriculumData)) {
+        // It's an object like: { title: "...", details: "..." }
+        parsedCurriculum.push({
+          title: curriculumData.title,
+          details: curriculumData.details,
+        });
+      } else {
+        // Multiple curriculum entries: each is { title, details }
+        parsedCurriculum = curriculumData.map((item) => ({
+          title: item.title,
+          details: item.details,
+        }));
+      }
+    }
+
+    // ✅ Create and save course
     const newCourse = new Course({
       courseTitle: req.body.courseTitle,
       courseUrl: courseSlug,
@@ -99,21 +120,31 @@ router.post('/submit-form-course', upload.single('courseImage'), async (req, res
       courseDemoVideo: req.body.courseDemoVideo,
       courseDescription: req.body.courseDescription,
       courseDuration: req.body.courseDuration,
-      courseCurriculum: req.body.courseCurriculum,
-      coursePrice: { online: onlinePrice, offline: offlinePrice },
-      courseDiscount: { online: onlineDiscount, offline: offlineDiscount },
+      courseCurriculum: parsedCurriculum,
+      coursePrice: {
+        online: onlinePrice,
+        offline: offlinePrice
+      },
+      courseDiscount: {
+        online: onlineDiscount,
+        offline: offlineDiscount
+      },
       courseCategory: finalCategory,
-      courseImage: { local: null, cloud: cloudCourseImage },
+      courseImage: {
+        local: null,
+        cloud: cloudCourseImage
+      },
       mentor: req.body.mentor
     });
 
     await newCourse.save();
-    res.redirect('/'); // redirect to course list
+    res.redirect('/'); // or your course list page
   } catch (error) {
     console.error('❌ Error saving course:', error);
     res.status(500).send('❌ Failed to save course.');
   }
 });
+
 
 // ------------------------
 // DELETE COURSE

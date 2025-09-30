@@ -6,7 +6,12 @@ const courseSchema = new mongoose.Schema({
     courseDemoVideo: { type: String },
     courseDescription: { type: String },
     courseDuration: { type: String },
-    courseCurriculum: { type: String },
+    courseCurriculum: [
+  {
+    title: { type: String, required: true },
+    details: { type: String, required: true }
+  }
+],
     courseUrl: { type: String, }, 
     coursePrice: {
         online: { type: Number, required: true },   

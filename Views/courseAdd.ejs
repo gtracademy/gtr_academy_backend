@@ -104,11 +104,15 @@
             <input type="text" name="courseDuration" class="form-control">
           </div>
 
-          <!-- Curriculum -->
-          <div class="mb-3 col-md-12">
-            <label class="form-label">Course Curriculum</label>
-            <textarea name="courseCurriculum" class="form-control" rows="3"></textarea>
-          </div>
+         <!-- Dynamic Curriculum Section -->
+<div class="mb-3 col-md-12">
+  <label class="form-label">Course Curriculum</label>
+  <div id="curriculum-container"></div>
+  <button type="button" id="add-curriculum-btn" class="btn btn-outline-primary mt-2">
+    + Add Curriculum Section
+  </button>
+</div>
+
 
           <!-- Pricing -->
           <h5 class="mt-4 mb-2 text-primary">Pricing & Discounts</h5>
@@ -164,6 +168,47 @@
       }
     });
   </script>
+
+
+
+<script>
+  const curriculumContainer = document.getElementById('curriculum-container');
+  const addBtn = document.getElementById('add-curriculum-btn');
+
+  let curriculumIndex = 0;
+
+  function createCurriculumSection(index) {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('border', 'p-3', 'rounded', 'mb-3');
+    wrapper.innerHTML = `
+      <div class="mb-2">
+        <label class="form-label">Title</label>
+        <input type="text" name="courseCurriculum[${index}][title]" class="form-control" required>
+      </div>
+      <div class="mb-2">
+        <label class="form-label">Details</label>
+        <textarea name="courseCurriculum[${index}][details]" class="form-control" rows="3" required></textarea>
+      </div>
+      <button type="button" class="btn btn-sm btn-danger remove-curriculum-btn">Remove</button>
+    `;
+    curriculumContainer.appendChild(wrapper);
+
+    // Handle removal
+    wrapper.querySelector('.remove-curriculum-btn').addEventListener('click', () => {
+      wrapper.remove();
+    });
+  }
+
+  addBtn.addEventListener('click', () => {
+    createCurriculumSection(curriculumIndex++);
+  });
+
+  // Optionally, add one by default
+  window.addEventListener('DOMContentLoaded', () => {
+    createCurriculumSection(curriculumIndex++);
+  });
+</script>
+
 
 </body>
 </html>
