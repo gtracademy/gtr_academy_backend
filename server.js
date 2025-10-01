@@ -14,6 +14,7 @@ const mentorRoutes = require('./Routes/mentorRoutes')
 const userRoutes = require('./Routes/userRoute')
 const methodOverride = require('method-override')
 const session = require('express-session');
+const apiRoutes = require('./Routes/apiRoutes')
 
 
 
@@ -47,6 +48,7 @@ app.use('/', homeRoutes)
 app.use('/course',addCourseRoutes)
 app.use('/user', userRoutes)
 app.use('/mentor',mentorRoutes)
+app.use('/api',apiRoutes)
 
 
 

@@ -10,6 +10,10 @@ router.get('/course', adminAuth,async (req, res) => {
 });
 
 
+
+
+
+
 // Route to handle course form submission
 router.post('/submit-course-form', async (req, res) => {        
     try {
