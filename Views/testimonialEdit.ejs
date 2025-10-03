@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Mentors - GTR Academy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-r from-blue-50 to-indigo-100 min-h-screen font-sans">
+
+  <%- include('Header'); -%>
+
+  <form action="/testimonial/admin/edit/<%= testimonial._id %>" method="POST" enctype="multipart/form-data" class="max-w-2xl mx-auto p-6 space-y-6 bg-white rounded-lg shadow-lg mt-10">
+    <h2 class="text-2xl font-semibold text-gray-700">Edit Testimonial</h2>
+    
+    <div>
+      <label for="name" class="block text-sm font-medium text-gray-600">Name</label>
+      <input type="text" name="name" id="name" value="<%= testimonial.name %>" required class="w-full border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    </div>
+
+    <div>
+      <label for="company" class="block text-sm font-medium text-gray-600">Company</label>
+      <input type="text" name="company" id="company" value="<%= testimonial.company %>" class="w-full border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    </div>
+
+    <div>
+      <label for="salary" class="block text-sm font-medium text-gray-600">Salary</label>
+      <input type="text" name="salary" id="salary" value="<%= testimonial.salary %>" class="w-full border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    </div>
+
+    <div>
+      <label for="message" class="block text-sm font-medium text-gray-600">Message</label>
+      <textarea name="message" id="message" required class="w-full border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"><%= testimonial.message %></textarea>
+    </div>
+
+    <div>
+      <label for="course" class="block text-sm font-medium text-gray-600">Course</label>
+      <select name="course" id="course" required class="w-full border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        <option value="SAP MM" <%= testimonial.course === 'SAP MM' ? 'selected' : '' %>>SAP MM</option>
+        <option value="SAP WM" <%= testimonial.course === 'SAP WM' ? 'selected' : '' %>>SAP WM</option>
+        <option value="SAP FICO" <%= testimonial.course === 'SAP FICO' ? 'selected' : '' %>>SAP FICO</option>
+      </select>
+    </div>
+
+    <!-- Rating Input -->
+    <div>
+      <label for="rating" class="block text-sm font-medium text-gray-600">Rating (1 to 5)</label>
+      <input
+        type="number"
+        name="rating"
+        id="rating"
+        min="1"
+        max="5"
+        value="<%= testimonial.rating %>"
+        required
+        class="w-full border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      />
+    </div>
+
+    <div>
+      <label for="status" class="block text-sm font-medium text-gray-600">Status</label>
+      <select name="status" id="status" class="w-full border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        <option value="pending" <%= testimonial.status === 'pending' ? 'selected' : '' %>>Pending</option>
+        <option value="approved" <%= testimonial.status === 'approved' ? 'selected' : '' %>>Approved</option>
+        <option value="rejected" <%= testimonial.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="image" class="block text-sm font-medium text-gray-600">Replace Image (optional)</label>
+      <input type="file" name="image" id="image" accept="image/*" class="w-full border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    </div>
+
+    <div>
+      <label for="video" class="block text-sm font-medium text-gray-600">Replace Video (optional)</label>
+      <input type="file" name="video" id="video" accept="video/*" class="w-full border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Update</button>
+    </div>
+  </form>
+
+</body>
+
+</html>
