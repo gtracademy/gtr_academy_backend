@@ -225,4 +225,8 @@ router.post('/update/:id', upload.single('courseImage'), async (req, res) => {
   }
 });
 
+
+
+
+
 module.exports = router;

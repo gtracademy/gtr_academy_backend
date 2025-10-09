@@ -32,5 +32,20 @@ router.post('/submit-form-enquiry', async (req, res) => {
 })
 
 
+// ------------------------
+// LOGOUT ROUTE
+// ------------------------
+router.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('❌ Error destroying session:', err);
+      return res.status(500).send('❌ Logout failed');
+    }
+    res.clearCookie('connect.sid'); // Optional: only if using default session cookie name
+    res.redirect('/'); // Redirect to login page or homepage
+  });
+});
+
+
 
 module.exports = router;
