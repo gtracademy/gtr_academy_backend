@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Testimonial = require('../Models/testimonialModel');
 const upload = require('../Middlewares/upload'); // Multer setup (image/video)
+const adminAuth = require('../Middlewares/authMiddleware')
+
 
 // 🌐 Public Testimonials (only approved)
 router.get('/', async (req, res) => {
@@ -51,7 +53,7 @@ router.post('/submit', upload.fields([
 });
 
 // 🔐 Admin Panel
-router.get('/admin', async (req, res) => {
+router.get('/admin',adminAuth, async (req, res) => {
   const testimonials = await Testimonial.find().sort({ createdAt: -1 });
   res.render('testimonialAdmin', { testimonials });
 });
@@ -69,7 +71,7 @@ router.post('/admin/reject/:id', async (req, res) => {
 });
 
 // ✏️ Edit Form
-router.get('/admin/edit/:id', async (req, res) => {
+router.get('/admin/edit/:id',adminAuth, async (req, res) => {
   const testimonial = await Testimonial.findById(req.params.id);
   res.render('testimonialEdit', { testimonial });
 });
@@ -106,7 +108,7 @@ router.post('/admin/edit/:id', upload.fields([
 });
 
 // ❌ Delete Testimonial
-router.post('/admin/delete/:id', async (req, res) => {
+router.post('/admin/delete/:id', adminAuth,async (req, res) => {
   await Testimonial.findByIdAndDelete(req.params.id);
   res.redirect('/testimonial/admin');
 });

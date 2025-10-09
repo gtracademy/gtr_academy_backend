@@ -6,6 +6,6 @@ main().then((res)=>{
 }).catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/gtracademy");
+  await mongoose.connect(process.env.MONGO_URI);
 
 }
