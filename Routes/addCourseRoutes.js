@@ -120,6 +120,7 @@ router.post('/submit-form-course', upload.single('courseImage'), async (req, res
       courseBrochure: req.body.courseBrochure,
       courseDemoVideo: req.body.courseDemoVideo,
       courseDescription: req.body.courseDescription,
+      courseOverview: req.body.courseOverview,
       courseDuration: req.body.courseDuration,
       courseCurriculum: parsedCurriculum,
       coursePrice: {
@@ -200,6 +201,7 @@ router.post('/update/:id', upload.single('courseImage'), async (req, res) => {
       courseBrochure: req.body.courseBrochure,
       courseDemoVideo: req.body.courseDemoVideo,
       courseDescription: req.body.courseDescription,
+      courseOverview: req.body.courseOverview,
       courseDuration: req.body.courseDuration,
       courseCurriculum: req.body.courseCurriculum,
       coursePrice: {

@@ -5,6 +5,7 @@ const courseSchema = new mongoose.Schema({
     courseBrochure: { type: String },
     courseDemoVideo: { type: String },
     courseDescription: { type: String },
+    courseOverview: {type:String}, 
     courseDuration: { type: String },
     courseCurriculum: [
   {

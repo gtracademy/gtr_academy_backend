@@ -16,6 +16,7 @@ const methodOverride = require('method-override')
 const session = require('express-session');
 const apiRoutes = require('./Routes/apiRoutes')
 const testimonialRoutes = require('./Routes/testimonialRoutes')
+const searchRoutes = require('./Routes/searchRoutes')
 
 
 
@@ -51,6 +52,7 @@ app.use('/user', userRoutes)
 app.use('/mentor',mentorRoutes)
 app.use('/api',apiRoutes)
 app.use('/testimonial',testimonialRoutes)
+app.use('/search',searchRoutes)
 
 
 
