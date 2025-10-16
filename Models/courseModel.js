@@ -27,6 +27,10 @@ const courseSchema = new mongoose.Schema({
         local: String,
         cloud: String
     },
+      courseBannerImage: {
+        local: String,
+        cloud: String
+    },
     mentor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Mentor",

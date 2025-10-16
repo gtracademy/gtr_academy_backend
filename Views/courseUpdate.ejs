@@ -45,193 +45,248 @@
 
   <%- include('Header'); -%>
 
-    <div class="container">
-      <div class="form-wrapper">
-        <h2>Update Course</h2>
-        <form action="/course/update/<%= Course._id %>" method="POST" enctype="multipart/form-data">
-          <div class="row">
+  <div class="container">
+    <div class="form-wrapper">
+      <h2>Update Course</h2>
+      <form action="/course/update/<%= Course._id %>" method="POST" enctype="multipart/form-data">
+        <div class="row">
 
-            <!-- Title -->
-            <div class="mb-3 col-md-6">
-              <label class="form-label">Course Title</label>
-              <input type="text" name="courseTitle" class="form-control" value="<%= Course.courseTitle %>" required>
-            </div>
+          <!-- Title -->
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Course Title</label>
+            <input type="text" name="courseTitle" class="form-control" value="<%= Course.courseTitle %>" required>
+          </div>
 
-            <!-- Slug -->
-            <div class="mb-3 col-md-6">
-              <label class="form-label">Course Slug (URL)</label>
-              <input type="text" name="courseSlug" class="form-control" value="<%= Course.courseUrl %>"
-                placeholder="e.g., full-stack-development" required>
-              <small class="text-muted">This slug is used in the course URL.</small>
-            </div>
+          <!-- Slug -->
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Course Slug (URL)</label>
+            <input type="text" name="courseSlug" class="form-control" value="<%= Course.courseUrl %>" placeholder="e.g., full-stack-development" required>
+            <small class="text-muted">This slug is used in the course URL.</small>
+          </div>
 
+          <!-- Brochure -->
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Brochure URL</label>
+            <input type="text" name="courseBrochure" class="form-control" value="<%= Course.courseBrochure %>">
+          </div>
 
-            <!-- Brochure -->
-            <div class="mb-3 col-md-6">
-              <label class="form-label">Brochure URL</label>
-              <input type="text" name="courseBrochure" class="form-control" value="<%= Course.courseBrochure %>">
-            </div>
+          <!-- Demo Video -->
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Demo Video URL</label>
+            <input type="text" name="courseDemoVideo" class="form-control" value="<%= Course.courseDemoVideo %>">
+          </div>
 
-            <!-- Demo Video -->
-            <div class="mb-3 col-md-6">
-              <label class="form-label">Demo Video URL</label>
-              <input type="text" name="courseDemoVideo" class="form-control" value="<%= Course.courseDemoVideo %>">
-            </div>
+          <!-- Course Image -->
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Course Image</label><br>
+            <% if (Course.courseImage && Course.courseImage.cloud) { %>
+              <img src="<%= Course.courseImage.cloud %>" alt="Course Image" width="100" class="mb-2">
+            <% } %>
+            <input type="file" name="courseImage" class="form-control" accept="image/*">
+          </div>
 
-            <!-- Image -->
-            <div class="mb-3 col-md-6">
-              <label class="form-label">Course Image</label><br>
-              <% if (Course.courseImage && Course.courseImage.cloud) { %>
-                <img src="<%= Course.courseImage.cloud %>" alt="Course Image" width="100" class="mb-2">
+          <!-- Course Banner Image -->
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Course Banner Image</label><br>
+            <% if (Course.courseBannerImage && Course.courseBannerImage.cloud) { %>
+              <img src="<%= Course.courseBannerImage.cloud %>" alt="Current Banner Image" class="img-fluid rounded" style="max-height: 150px; margin-bottom:10px;">
+            <% } %>
+            <input type="file" name="courseBannerImage" class="form-control" accept="image/*">
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3 col-md-12">
+            <label class="form-label">Course Description</label>
+            <textarea name="courseDescription" class="form-control" rows="3"><%= Course.courseDescription %></textarea>
+          </div>
+
+          <!-- Overview -->
+          <div class="mb-3 col-md-12">
+            <label class="form-label">Course Overview</label>
+            <textarea name="courseOverview" class="form-control" rows="3"><%= Course.courseOverview %></textarea>
+          </div>
+
+          <!-- Duration -->
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Duration</label>
+            <input type="text" name="courseDuration" class="form-control" value="<%= Course.courseDuration %>">
+          </div>
+
+          <!-- Mentor -->
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Choose Mentor</label>
+            <select name="mentor" class="form-control" required>
+              <% if (Course.mentor) { %>
+                <option value="<%= Course.mentor._id || Course.mentor %>" selected><%= Course.mentor.name || '' %> - <%= Course.mentor.designation || '' %></option>
+              <% } else { %>
+                <option value="">-- Choose Mentor --</option>
+              <% } %>
+              <% mentors.forEach(function(mentor) { %>
+                <% if (!Course.mentor || Course.mentor.toString() !== mentor._id.toString()) { %>
+                  <option value="<%= mentor._id %>"><%= mentor.name %> - <%= mentor.designation %></option>
                 <% } %>
-                  <input type="file" name="courseImage" class="form-control" accept="image/*">
-            </div>
-
-            <!-- Description -->
-            <div class="mb-3 col-md-12">
-              <label class="form-label">Course Description</label>
-              <textarea name="courseDescription" class="form-control"
-                rows="3"><%= Course.courseDescription %></textarea>
-            </div>
-
-              <!-- Overview -->
-            <div class="mb-3 col-md-12">
-              <label class="form-label">Course Overview</label>
-              <textarea name="courseOverview" class="form-control"
-                rows="3"><%= Course.courseOverview %></textarea>
-            </div>
-            
-
-            <!-- Duration -->
-            <div class="mb-3 col-md-6">
-              <label class="form-label">Duration</label>
-              <input type="text" name="courseDuration" class="form-control" value="<%= Course.courseDuration %>">
-            </div>
-
-            <!-- Mentor -->
-            <div class="mb-3 col-md-6">
-              <label class="form-label">Choose Mentor</label>
-              <select name="mentor" class="form-control" required>
-                <% if (Course.mentor) { %>
-                  <option value="<%= Course.mentor._id || Course.mentor %>" selected>
-                    <%= Course.mentor.name || '' %> - <%= Course.mentor.designation || '' %>
-                  </option>
-                  <% } else { %>
-                    <option value="">-- Choose Mentor --</option>
-                    <% } %>
-                      <% mentors.forEach(function(mentor) { %>
-                        <% if (!Course.mentor || Course.mentor.toString() !==mentor._id.toString()) { %>
-                          <option value="<%= mentor._id %>">
-                            <%= mentor.name %> - <%= mentor.designation %>
-                          </option>
-                          <% } %>
-                            <% }) %>
-              </select>
-            </div>
-
-            <!-- Curriculum -->
-<div class="mb-3 col-md-12">
-  <label class="form-label">Course Curriculum</label>
-  <div id="curriculum-container">
-    <% if (Course.courseCurriculum && Course.courseCurriculum.length > 0) { %>
-      <% Course.courseCurriculum.forEach((item, index) => { %>
-        <div class="border p-3 mb-3 rounded curriculum-item">
-          <div class="mb-2">
-            <label>Title</label>
-            <input type="text" name="courseCurriculum[<%= index %>][title]" class="form-control" value="<%= item.title %>" required>
+              <% }) %>
+            </select>
           </div>
-          <div class="mb-2">
-            <label>Details</label>
-            <textarea name="courseCurriculum[<%= index %>][details]" class="form-control" rows="2" required><%= item.details %></textarea>
+
+          <!-- Curriculum -->
+          <div class="mb-3 col-md-12">
+            <label class="form-label">Course Curriculum</label>
+            <div id="curriculum-container">
+              <% if (Course.courseCurriculum && Course.courseCurriculum.length > 0) { %>
+                <% Course.courseCurriculum.forEach((item, index) => { %>
+                  <div class="border p-3 mb-3 rounded curriculum-item">
+                    <div class="mb-2">
+                      <label>Title</label>
+                      <input type="text" name="courseCurriculum[<%= index %>][title]" class="form-control" value="<%= item.title %>" required>
+                    </div>
+                    <div class="mb-2">
+                      <label>Details</label>
+                      <textarea name="courseCurriculum[<%= index %>][details]" class="form-control" rows="2" required><%= item.details %></textarea>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-danger remove-curriculum">Remove</button>
+                  </div>
+                <% }) %>
+              <% } else { %>
+                <div class="border p-3 mb-3 rounded curriculum-item">
+                  <div class="mb-2">
+                    <label>Title</label>
+                    <input type="text" name="courseCurriculum[0][title]" class="form-control" required>
+                  </div>
+                  <div class="mb-2">
+                    <label>Details</label>
+                    <textarea name="courseCurriculum[0][details]" class="form-control" rows="2" required></textarea>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-danger remove-curriculum">Remove</button>
+                </div>
+              <% } %>
+            </div>
+            <button type="button" id="add-curriculum" class="btn btn-outline-primary">+ Add Curriculum Section</button>
           </div>
-          <button type="button" class="btn btn-sm btn-danger remove-curriculum">Remove</button>
+
+          <!-- Pricing -->
+          <h5 class="mt-4 mb-2 text-primary">Pricing & Discounts</h5>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Online Price (₹)</label>
+            <input type="number" name="coursePrice[online]" class="form-control" value="<%= Course.coursePrice ? Course.coursePrice.online : '' %>">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Offline Price (₹)</label>
+            <input type="number" name="coursePrice[offline]" class="form-control" value="<%= Course.coursePrice ? Course.coursePrice.offline : '' %>">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Online Discount (₹)</label>
+            <input type="number" name="courseDiscount[online]" class="form-control" value="<%= Course.courseDiscount ? Course.courseDiscount.online : 0 %>">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Offline Discount (₹)</label>
+            <input type="number" name="courseDiscount[offline]" class="form-control" value="<%= Course.courseDiscount ? Course.courseDiscount.offline : 0 %>">
+          </div>
+
+          <!-- Category Dropdown + Custom Input -->
+          <div class="mb-3 col-md-12">
+            <label class="form-label">Course Category</label>
+            <select id="categorySelect" class="form-control" required>
+              <option value="">-- Select Category --</option>
+              <option value="SAP Technical" <%= Course.courseCategory === 'SAP Technical' ? 'selected' : '' %>>SAP Technical</option>
+              <option value="SAP Functional" <%= Course.courseCategory === 'SAP Functional' ? 'selected' : '' %>>SAP Functional</option>
+              <option value="Data Science" <%= Course.courseCategory === 'Data Science' ? 'selected' : '' %>>Data Science</option>
+              <option value="HR Courses" <%= Course.courseCategory === 'HR Courses' ? 'selected' : '' %>>HR Courses</option>
+              <option value="VLSI" <%= Course.courseCategory === 'VLSI' ? 'selected' : '' %>>VLSI</option>
+              <option value="Other" <%= (Course.courseCategory && ['SAP Technical','SAP Functional','Data Science','HR Courses','VLSI'].indexOf(Course.courseCategory) === -1) ? 'selected' : '' %>>Other</option>
+            </select>
+
+            <input
+              type="text"
+              id="customCategory"
+              class="form-control mt-2"
+              placeholder="Enter custom category"
+              style="display: none;"
+            >
+
+            <!-- Hidden input to submit the final category value -->
+            <input type="hidden" name="courseCategory" id="finalCategoryInput" value="<%= Course.courseCategory %>">
+          </div>
+
         </div>
-      <% }) %>
-    <% } else { %>
-      <div class="border p-3 mb-3 rounded curriculum-item">
+
+        <button type="submit" class="btn btn-primary w-100">Update Course</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Curriculum logic
+    let curriculumIndex = <%= Course.courseCurriculum ? Course.courseCurriculum.length : 1 %>;
+
+    document.getElementById('add-curriculum').addEventListener('click', () => {
+      const container = document.getElementById('curriculum-container');
+
+      const newItem = document.createElement('div');
+      newItem.classList.add('border', 'p-3', 'mb-3', 'rounded', 'curriculum-item');
+      newItem.innerHTML = `
         <div class="mb-2">
           <label>Title</label>
-          <input type="text" name="courseCurriculum[0][title]" class="form-control" required>
+          <input type="text" name="courseCurriculum[${curriculumIndex}][title]" class="form-control" required>
         </div>
         <div class="mb-2">
           <label>Details</label>
-          <textarea name="courseCurriculum[0][details]" class="form-control" rows="2" required></textarea>
+          <textarea name="courseCurriculum[${curriculumIndex}][details]" class="form-control" rows="2" required></textarea>
         </div>
         <button type="button" class="btn btn-sm btn-danger remove-curriculum">Remove</button>
-      </div>
-    <% } %>
-  </div>
-  <button type="button" id="add-curriculum" class="btn btn-outline-primary">+ Add Curriculum Section</button>
-</div>
+      `;
 
+      container.appendChild(newItem);
+      curriculumIndex++;
+    });
 
-            <!-- Pricing -->
-            <h5 class="mt-4 mb-2 text-primary">Pricing & Discounts</h5>
-            <div class="mb-3 col-md-6">
-              <label class="form-label">Online Price (₹)</label>
-              <input type="number" name="coursePrice[online]" class="form-control"
-                value="<%= Course.coursePrice ? Course.coursePrice.online : '' %>">
-            </div>
-            <div class="mb-3 col-md-6">
-              <label class="form-label">Offline Price (₹)</label>
-              <input type="number" name="coursePrice[offline]" class="form-control"
-                value="<%= Course.coursePrice ? Course.coursePrice.offline : '' %>">
-            </div>
-            <div class="mb-3 col-md-6">
-              <label class="form-label">Online Discount (₹) </label>
-              <input type="number" name="courseDiscount[online]" class="form-control"
-                value="<%= Course.courseDiscount ? Course.courseDiscount.online : 0 %>">
-            </div>
-            <div class="mb-3 col-md-6">
-              <label class="form-label">Offline Discount (₹)</label>
-              <input type="number" name="courseDiscount[offline]" class="form-control"
-                value="<%= Course.courseDiscount ? Course.courseDiscount.offline : 0 %>">
-            </div>
+    document.addEventListener('click', function (e) {
+      if (e.target && e.target.classList.contains('remove-curriculum')) {
+        e.target.closest('.curriculum-item').remove();
+      }
+    });
 
-            <!-- Category -->
-            <div class="mb-3 col-md-12">
-              <label class="form-label">Course Category</label>
-              <input type="text" name="courseCategory" class="form-control" value="<%= Course.courseCategory %>">
-            </div>
-          </div>
+    // Category toggle logic
+    const categorySelect = document.getElementById('categorySelect');
+    const customCategoryInput = document.getElementById('customCategory');
+    const finalCategoryInput = document.getElementById('finalCategoryInput');
 
-          <button type="submit" class="btn btn-primary w-100">Update Course</button>
-        </form>
-      </div>
-    </div>
-
-
-
-    <script>
-  let curriculumIndex = <%= Course.courseCurriculum ? Course.courseCurriculum.length : 1 %>;
-
-  document.getElementById('add-curriculum').addEventListener('click', () => {
-    const container = document.getElementById('curriculum-container');
-
-    const newItem = document.createElement('div');
-    newItem.classList.add('border', 'p-3', 'mb-3', 'rounded', 'curriculum-item');
-    newItem.innerHTML = `
-      <div class="mb-2">
-        <label>Title</label>
-        <input type="text" name="courseCurriculum[${curriculumIndex}][title]" class="form-control" required>
-      </div>
-      <div class="mb-2">
-        <label>Details</label>
-        <textarea name="courseCurriculum[${curriculumIndex}][details]" class="form-control" rows="2" required></textarea>
-      </div>
-      <button type="button" class="btn btn-sm btn-danger remove-curriculum">Remove</button>
-    `;
-
-    container.appendChild(newItem);
-    curriculumIndex++;
-  });
-
-  document.addEventListener('click', function (e) {
-    if (e.target && e.target.classList.contains('remove-curriculum')) {
-      e.target.closest('.curriculum-item').remove();
+    function toggleCustomCategory() {
+      if (categorySelect.value === 'Other') {
+        customCategoryInput.style.display = 'block';
+        customCategoryInput.required = true;
+        finalCategoryInput.value = customCategoryInput.value.trim();
+      } else {
+        customCategoryInput.style.display = 'none';
+        customCategoryInput.required = false;
+        finalCategoryInput.value = categorySelect.value;
+      }
     }
-  });
-</script>
+
+    // On page load, decide whether to show custom input and fill values
+    window.addEventListener('DOMContentLoaded', () => {
+      // If current category is custom (not in predefined), show input and fill value
+      const predefined = ['SAP Technical','SAP Functional','Data Science','HR Courses','VLSI'];
+      if (!predefined.includes(finalCategoryInput.value) && finalCategoryInput.value !== '') {
+        categorySelect.value = 'Other';
+        customCategoryInput.style.display = 'block';
+        customCategoryInput.value = finalCategoryInput.value;
+        customCategoryInput.required = true;
+      } else {
+        categorySelect.value = finalCategoryInput.value || '';
+      }
+    });
+
+    // Update on dropdown change
+    categorySelect.addEventListener('change', () => {
+      toggleCustomCategory();
+    });
+
+    // Update hidden input on typing custom category
+    customCategoryInput.addEventListener('input', () => {
+      finalCategoryInput.value = customCategoryInput.value.trim();
+    });
+  </script>
 
 </body>
 

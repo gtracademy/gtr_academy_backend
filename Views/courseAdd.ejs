@@ -45,148 +45,161 @@
 
   <%- include('Header'); -%>
 
-  <div class="container">
-    <div class="form-wrapper">
-      <h2>Add New Course</h2>
-      <form action="/course/submit-form-course" method="POST" enctype="multipart/form-data">
-        <div class="row">
-          <!-- Mentor -->
-          <div class="mb-3 col-md-6">
-            <label class="form-label">Choose Mentor</label>
-            <select name="mentor" class="form-control" required>
-              <option value="">-- Choose Mentor --</option>
-              <% mentors.forEach(function(mentor) { %>
-                <option value="<%= mentor._id %>">
-                  <%= mentor.name %> - <%= mentor.designation %>
-                </option>
-              <% }) %>
-            </select>
+    <div class="container">
+      <div class="form-wrapper">
+        <h2>Add New Course</h2>
+        <form action="/course/submit-form-course" method="POST" enctype="multipart/form-data">
+          <div class="row">
+            <!-- Mentor -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Choose Mentor</label>
+              <select name="mentor" class="form-control" required>
+                <option value="">-- Choose Mentor --</option>
+                <% mentors.forEach(function(mentor) { %>
+                  <option value="<%= mentor._id %>">
+                    <%= mentor.name %> - <%= mentor.designation %>
+                  </option>
+                  <% }) %>
+              </select>
+            </div>
+
+            <!-- Title -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Course Title</label>
+              <input type="text" name="courseTitle" class="form-control" required>
+            </div>
+
+            <!-- Slug -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Course Slug (URL)</label>
+              <input type="text" name="courseSlug" class="form-control" placeholder="e.g., full-stack-development"
+                required>
+              <small class="text-muted">This will be used in the course URL (only letters, numbers, dashes).</small>
+            </div>
+
+            <!-- Brochure -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Brochure URL</label>
+              <input type="text" name="courseBrochure" class="form-control">
+            </div>
+
+            <!-- Video & Image -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Demo Video URL</label>
+              <input type="text" name="courseDemoVideo" class="form-control">
+            </div>
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Course Image</label>
+              <input type="file" name="courseImage" class="form-control" accept="image/*">
+            </div>
+
+            <!-- Course Banner Image -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Course Banner Image</label>
+              <input type="file" name="courseBannerImage" class="form-control" accept="image/*">
+            </div>
+
+              <!-- Duration -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Course Duration</label>
+              <input type="text" name="courseDuration" class="form-control">
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3 col-md-12">
+              <label class="form-label">Course Description</label>
+              <textarea name="courseDescription" class="form-control" rows="3"></textarea>
+            </div>
+
+            <!-- Overview -->
+            <div class="mb-3 col-md-12">
+              <label class="form-label">Course Overview</label>
+              <textarea name="courseOverview" class="form-control" rows="3"></textarea>
+            </div>
+
+          
+
+            <!-- Dynamic Curriculum Section -->
+            <div class="mb-3 col-md-12">
+              <label class="form-label">Course Curriculum</label>
+              <div id="curriculum-container"></div>
+              <button type="button" id="add-curriculum-btn" class="btn btn-outline-primary mt-2">
+                + Add Curriculum Section
+              </button>
+            </div>
+
+
+            <!-- Pricing -->
+            <h5 class="mt-4 mb-2 text-primary">Pricing & Discounts</h5>
+
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Online Price (₹)</label>
+              <input type="number" name="coursePrice[online]" class="form-control" required>
+            </div>
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Offline Price (₹)</label>
+              <input type="number" name="coursePrice[offline]" class="form-control" required>
+            </div>
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Online Discount (₹)</label>
+              <input type="number" name="courseDiscount[online]" class="form-control" value="0">
+            </div>
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Offline Discount (₹)</label>
+              <input type="number" name="courseDiscount[offline]" class="form-control" value="0">
+            </div>
+
+            <!-- Category Dropdown -->
+            <div class="mb-3 col-md-12">
+              <label class="form-label">Course Category</label>
+              <select id="categorySelect" name="courseCategory" class="form-control" required>
+                <option value="">-- Select Category --</option>
+                <option value="SAP Technical">SAP Technical</option>
+                <option value="SAP Functional">SAP Functional</option>
+                <option value="Data Science">Data Science</option>
+                <option value="HR Courses">HR Courses</option>
+                <option value="VLSI">VLSI</option>
+                <option value="Other">Other</option>
+              </select>
+              <input type="text" id="customCategory" name="customCategory" class="form-control mt-2"
+                placeholder="Enter custom category" style="display: none;">
+            </div>
+
+
           </div>
 
-          <!-- Title -->
-          <div class="mb-3 col-md-6">
-            <label class="form-label">Course Title</label>
-            <input type="text" name="courseTitle" class="form-control" required>
-          </div>
-
-          <!-- Slug -->
-          <div class="mb-3 col-md-6">
-            <label class="form-label">Course Slug (URL)</label>
-            <input type="text" name="courseSlug" class="form-control" placeholder="e.g., full-stack-development" required>
-            <small class="text-muted">This will be used in the course URL (only letters, numbers, dashes).</small>
-          </div>
-
-          <!-- Brochure -->
-          <div class="mb-3 col-md-6">
-            <label class="form-label">Brochure URL</label>
-            <input type="text" name="courseBrochure" class="form-control">
-          </div>
-
-          <!-- Video & Image -->
-          <div class="mb-3 col-md-6">
-            <label class="form-label">Demo Video URL</label>
-            <input type="text" name="courseDemoVideo" class="form-control">
-          </div>
-          <div class="mb-3 col-md-6">
-            <label class="form-label">Course Image</label>
-            <input type="file" name="courseImage" class="form-control" accept="image/*">
-          </div>
-
-          <!-- Description -->
-          <div class="mb-3 col-md-12">
-            <label class="form-label">Course Description</label>
-            <textarea name="courseDescription" class="form-control" rows="3"></textarea>
-          </div>
-
-               <!-- Overview -->
-          <div class="mb-3 col-md-12">
-            <label class="form-label">Course Overview</label>
-            <textarea name="courseOverview" class="form-control" rows="3"></textarea>
-          </div>
-
-          <!-- Duration -->
-          <div class="mb-3 col-md-6">
-            <label class="form-label">Course Duration</label>
-            <input type="text" name="courseDuration" class="form-control">
-          </div>
-
-         <!-- Dynamic Curriculum Section -->
-<div class="mb-3 col-md-12">
-  <label class="form-label">Course Curriculum</label>
-  <div id="curriculum-container"></div>
-  <button type="button" id="add-curriculum-btn" class="btn btn-outline-primary mt-2">
-    + Add Curriculum Section
-  </button>
-</div>
-
-
-          <!-- Pricing -->
-          <h5 class="mt-4 mb-2 text-primary">Pricing & Discounts</h5>
-
-          <div class="mb-3 col-md-6">
-            <label class="form-label">Online Price (₹)</label>
-            <input type="number" name="coursePrice[online]" class="form-control" required>
-          </div>
-          <div class="mb-3 col-md-6">
-            <label class="form-label">Offline Price (₹)</label>
-            <input type="number" name="coursePrice[offline]" class="form-control" required>
-          </div>
-          <div class="mb-3 col-md-6">
-            <label class="form-label">Online Discount (₹)</label>
-            <input type="number" name="courseDiscount[online]" class="form-control" value="0">
-          </div>
-          <div class="mb-3 col-md-6">
-            <label class="form-label">Offline Discount (₹)</label>
-            <input type="number" name="courseDiscount[offline]" class="form-control" value="0">
-          </div>
-
-          <!-- Category Dropdown -->
-          <div class="mb-3 col-md-12">
-            <label class="form-label">Course Category</label>
-            <select id="categorySelect" name="courseCategory" class="form-control" required>
-              <option value="">-- Select Category --</option>
-              <option value="SAP">SAP</option>
-              <option value="Data">Data</option>
-              <option value="Other">Other</option>
-            </select>
-            <input type="text" id="customCategory" name="customCategory" class="form-control mt-2"
-                   placeholder="Enter custom category" style="display: none;">
-          </div>
-
-        </div>
-
-        <button type="submit" class="btn btn-primary w-100">Submit Course</button>
-      </form>
+          <button type="submit" class="btn btn-primary w-100">Submit Course</button>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <script>
-    const select = document.getElementById('categorySelect');
-    const customInput = document.getElementById('customCategory');
+    <script>
+      const select = document.getElementById('categorySelect');
+      const customInput = document.getElementById('customCategory');
 
-    select.addEventListener('change', () => {
-      if (select.value === 'Other') {
-        customInput.style.display = 'block';
-        customInput.value = '';
-      } else {
-        customInput.style.display = 'none';
-        customInput.value = select.value;
-      }
-    });
-  </script>
-
+      select.addEventListener('change', () => {
+        if (select.value === 'Other') {
+          customInput.style.display = 'block';
+          customInput.value = '';
+        } else {
+          customInput.style.display = 'none';
+          customInput.value = select.value;
+        }
+      });
+    </script>
 
 
-<script>
-  const curriculumContainer = document.getElementById('curriculum-container');
-  const addBtn = document.getElementById('add-curriculum-btn');
 
-  let curriculumIndex = 0;
+    <script>
+      const curriculumContainer = document.getElementById('curriculum-container');
+      const addBtn = document.getElementById('add-curriculum-btn');
 
-  function createCurriculumSection(index) {
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('border', 'p-3', 'rounded', 'mb-3');
-    wrapper.innerHTML = `
+      let curriculumIndex = 0;
+
+      function createCurriculumSection(index) {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('border', 'p-3', 'rounded', 'mb-3');
+        wrapper.innerHTML = `
       <div class="mb-2">
         <label class="form-label">Title</label>
         <input type="text" name="courseCurriculum[${index}][title]" class="form-control" required>
@@ -197,24 +210,25 @@
       </div>
       <button type="button" class="btn btn-sm btn-danger remove-curriculum-btn">Remove</button>
     `;
-    curriculumContainer.appendChild(wrapper);
+        curriculumContainer.appendChild(wrapper);
 
-    // Handle removal
-    wrapper.querySelector('.remove-curriculum-btn').addEventListener('click', () => {
-      wrapper.remove();
-    });
-  }
+        // Handle removal
+        wrapper.querySelector('.remove-curriculum-btn').addEventListener('click', () => {
+          wrapper.remove();
+        });
+      }
 
-  addBtn.addEventListener('click', () => {
-    createCurriculumSection(curriculumIndex++);
-  });
+      addBtn.addEventListener('click', () => {
+        createCurriculumSection(curriculumIndex++);
+      });
 
-  // Optionally, add one by default
-  window.addEventListener('DOMContentLoaded', () => {
-    createCurriculumSection(curriculumIndex++);
-  });
-</script>
+      // Optionally, add one by default
+      window.addEventListener('DOMContentLoaded', () => {
+        createCurriculumSection(curriculumIndex++);
+      });
+    </script>
 
 
 </body>
+
 </html>

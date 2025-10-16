@@ -1,14 +1,15 @@
 const express = require('express');
 const Course = require('../Models/courseModel');
 const Mentor = require('../Models/mentorModel');
-
 const router = express.Router();
 
+
 /**
- * @route   GET /api/search?name=python
- * @desc    Search courses by name (courseTitle)
- * @access  Public or protected (add middleware if needed)
- */
+   * @route   GET /api/search?name=python
+   * @desc    Search courses by name (courseTitle)
+   * @access  Public or protected (add middleware if needed)
+   */
+
 router.get('/', async (req, res) => {
   try {
     const query = req.query.name?.trim() || "";

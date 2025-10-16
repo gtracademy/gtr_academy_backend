@@ -6,7 +6,7 @@ const { v2: cloudinary } = require('cloudinary');
 const Course = require('../Models/courseModel');
 const Mentor = require('../Models/mentorModel');
 require('dotenv').config();
-const adminAuth = require('../Middlewares/authMiddleware')
+const adminAuth = require('../Middlewares/authMiddleware');
 
 const router = express.Router();
 
@@ -33,6 +33,7 @@ const storage = multer.diskStorage({
     cb(null, unique);
   }
 });
+
 const upload = multer({ storage });
 
 // ------------------------
@@ -52,60 +53,61 @@ const slugify = (text) => {
 // Render Add Course Form
 router.get('/', adminAuth, async (req, res) => {
   const mentors = await Mentor.find({});
-  const categories = ["SAP", "Data", "Other"]; // predefined categories
+  const categories = ["SAP", "Data", "Other"];
   res.render('courseAdd', { mentors, categories });
 });
 
 // ------------------------
-// ADD COURSE POST
+// ADD COURSE
 // ------------------------
-router.post('/submit-form-course', upload.single('courseImage'), async (req, res) => {
+router.post('/submit-form-course', upload.fields([
+  { name: 'courseImage', maxCount: 1 },
+  { name: 'courseBannerImage', maxCount: 1 }
+]), async (req, res) => {
   try {
-    const courseImageLocalPath = req.file?.path || null;
+    const courseImagePath = req.files?.courseImage?.[0]?.path || null;
+    const courseBannerImagePath = req.files?.courseBannerImage?.[0]?.path || null;
 
-    // Upload image to Cloudinary if exists
     let cloudCourseImage = null;
-    if (courseImageLocalPath) {
-      const result = await cloudinary.uploader.upload(courseImageLocalPath, { folder: 'Courses' });
+    let cloudBannerImage = null;
+
+    if (courseImagePath) {
+      const result = await cloudinary.uploader.upload(courseImagePath, { folder: 'Courses' });
       cloudCourseImage = result.secure_url;
-      fs.unlinkSync(courseImageLocalPath); // delete from local
+      fs.unlinkSync(courseImagePath);
     }
 
-    // Determine category
+    if (courseBannerImagePath) {
+      const result = await cloudinary.uploader.upload(courseBannerImagePath, { folder: 'Courses/Banners' });
+      cloudBannerImage = result.secure_url;
+      fs.unlinkSync(courseBannerImagePath);
+    }
+
     let finalCategory = req.body.courseCategory;
     if (finalCategory === 'Other' && req.body.customCategory) {
       finalCategory = req.body.customCategory.trim();
     }
 
-    // Convert prices/discounts to numbers
     const onlinePrice = Number(req.body.coursePrice?.online || 0);
     const offlinePrice = Number(req.body.coursePrice?.offline || 0);
     const onlineDiscount = Number(req.body.courseDiscount?.online || 0);
     const offlineDiscount = Number(req.body.courseDiscount?.offline || 0);
 
-    // Slug (URL) generation
     let courseSlug = req.body.courseSlug?.trim();
     if (!courseSlug) {
       courseSlug = slugify(req.body.courseTitle);
     }
-
-    // Avoid duplicate URLs by appending timestamp
     courseSlug += '-' + Date.now();
 
-    // ✅ Parse dynamic curriculum input
     let parsedCurriculum = [];
     if (req.body.courseCurriculum) {
       const curriculumData = req.body.courseCurriculum;
-
-      // If there's only one curriculum entry, convert it to an array
       if (!Array.isArray(curriculumData)) {
-        // It's an object like: { title: "...", details: "..." }
         parsedCurriculum.push({
           title: curriculumData.title,
-          details: curriculumData.details, 
+          details: curriculumData.details,
         });
       } else {
-        // Multiple curriculum entries: each is { title, details }
         parsedCurriculum = curriculumData.map((item) => ({
           title: item.title,
           details: item.details,
@@ -113,7 +115,6 @@ router.post('/submit-form-course', upload.single('courseImage'), async (req, res
       }
     }
 
-    // ✅ Create and save course
     const newCourse = new Course({
       courseTitle: req.body.courseTitle,
       courseUrl: courseSlug,
@@ -136,17 +137,20 @@ router.post('/submit-form-course', upload.single('courseImage'), async (req, res
         local: null,
         cloud: cloudCourseImage
       },
+      courseBannerImage: {
+        local: null,
+        cloud: cloudBannerImage
+      },
       mentor: req.body.mentor
     });
 
     await newCourse.save();
-    res.redirect('/'); // or your course list page
+    res.redirect('/');
   } catch (error) {
     console.error('❌ Error saving course:', error);
     res.status(500).send('❌ Failed to save course.');
   }
 });
-
 
 // ------------------------
 // DELETE COURSE
@@ -168,7 +172,7 @@ router.get('/edit/:id', async (req, res) => {
   try {
     const mentors = await Mentor.find({});
     const course = await Course.findById(req.params.id).populate("mentor");
-    const categories = ["SAP Technical", "SAP Functional", "Data Science","Other"];
+    const categories = ["SAP Technical", "SAP Functional", "Data Science", "Other"];
     res.render('courseUpdate', { Course: course, mentors, categories });
   } catch (err) {
     console.error(err);
@@ -179,21 +183,34 @@ router.get('/edit/:id', async (req, res) => {
 // ------------------------
 // UPDATE COURSE
 // ------------------------
-router.post('/update/:id', upload.single('courseImage'), async (req, res) => {
+router.post('/update/:id', upload.fields([
+  { name: 'courseImage', maxCount: 1 },
+  { name: 'courseBannerImage', maxCount: 1 }
+]), async (req, res) => {
   try {
     const courseId = req.params.id;
-    let cloudCourseImage = null;
 
-    if (req.file?.path) {
-      const result = await cloudinary.uploader.upload(req.file.path, { folder: 'Courses' });
+    const courseImagePath = req.files?.courseImage?.[0]?.path || null;
+    const courseBannerImagePath = req.files?.courseBannerImage?.[0]?.path || null;
+
+    let cloudCourseImage = null;
+    let cloudBannerImage = null;
+
+    if (courseImagePath) {
+      const result = await cloudinary.uploader.upload(courseImagePath, { folder: 'Courses' });
       cloudCourseImage = result.secure_url;
-      fs.unlinkSync(req.file.path);
+      fs.unlinkSync(courseImagePath);
     }
 
-    // Slug update
+    if (courseBannerImagePath) {
+      const result = await cloudinary.uploader.upload(courseBannerImagePath, { folder: 'Courses/Banners' });
+      cloudBannerImage = result.secure_url;
+      fs.unlinkSync(courseBannerImagePath);
+    }
+
     let courseSlug = req.body.courseSlug
-  ? req.body.courseSlug.trim().replace(/\s+/g, '-').toLowerCase()
-  : slugify(req.body.courseTitle);
+      ? req.body.courseSlug.trim().replace(/\s+/g, '-').toLowerCase()
+      : slugify(req.body.courseTitle);
 
     const updateData = {
       courseTitle: req.body.courseTitle,
@@ -214,7 +231,8 @@ router.post('/update/:id', upload.single('courseImage'), async (req, res) => {
       },
       courseCategory: req.body.courseCategory,
       mentor: req.body.mentor,
-      ...(cloudCourseImage && { courseImage: { cloud: cloudCourseImage, local: null } })
+      ...(cloudCourseImage && { courseImage: { cloud: cloudCourseImage, local: null } }),
+      ...(cloudBannerImage && { courseBannerImage: { cloud: cloudBannerImage, local: null } })
     };
 
     const updatedCourse = await Course.findByIdAndUpdate(courseId, updateData, { new: true });
@@ -226,9 +244,5 @@ router.post('/update/:id', upload.single('courseImage'), async (req, res) => {
     res.status(500).send('❌ Failed to update course.');
   }
 });
-
-
-
-
 
 module.exports = router;
