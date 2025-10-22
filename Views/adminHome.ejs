@@ -10,55 +10,62 @@
 
 <%- include('Header'); -%>
 
-<body class="bg-gray-100 font-sans">
-  <div class="container mx-auto py-10 px-4">
-    <h1 class="text-3xl text-center font-bold text-blue-600 mb-4">Admin Home Page</h1>
-    <!-- <p class="text-lg text-center mb-10 text-gray-700">Welcome to the admin dashboard.</p> -->
+  <body class="bg-gray-100 font-sans">
+    <div class="container mx-auto py-10 px-4">
+      <h1 class="text-3xl text-center font-bold text-blue-600 mb-4">Admin Home Page</h1>
+      <!-- <p class="text-lg text-center mb-10 text-gray-700">Welcome to the admin dashboard.</p> -->
 
-    <h2 class="text-2xl font-semibold mb-6 text-gray-800">📚 Published Courses</h2>
+      <h2 class="text-2xl font-semibold mb-6 text-gray-800">📚 Published Courses</h2>
 
-    <% if (course && course.length > 0) { %>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% for (let i = 0; i < course.length; i++) { %>
-          <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-            <img src="<%= course[i].courseImage.cloud %>" alt="<%= course[i].courseTitle %>" class="w-full h-48 object-cover">
-            <div class="p-4">
-              <h3 class="text-xl font-semibold text-gray-800 mb-2"><%= course[i].courseTitle %></h3>
-             <p class="text-gray-600 text-sm mb-2">
-  <%= course[i].courseDescription.length > 150 
-    ? course[i].courseDescription.substring(0, 150) + '...' 
-    : course[i].courseDescription 
-  %>
-</p>
-              <p class="text-sm text-gray-500 mb-4"><strong>Duration:</strong> <%= course[i].courseDuration %></p>
-              <div class="flex gap-4">
-                <% if (course[i].courseBrochure) { %>
-                  <a href="<%= course[i].courseBrochure %>" target="_blank"
-                    class="text-sm text-blue-600 hover:underline">📥 Brochure</a>
-                <% } %>
-                <% if (course[i].courseDemoVideo) { %>
-                  <a href="<%= course[i].courseDemoVideo %>" target="_blank"
-                    class="text-sm text-green-600 hover:underline">▶️ Demo Video</a>
-                <% } %>
+      <% if (course && course.length> 0) { %>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <% for (let i=0; i < course.length; i++) { %>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+              <img src="<%= course[i].courseImage.cloud %>" alt="<%= course[i].courseTitle %>"
+                class="w-full h-48 object-cover">
+              <div class="p-4">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                  <%= course[i].courseTitle %>
+                </h3>
+                <p class="text-gray-600 text-sm mb-2">
+                  <%= course[i].courseDescription.length> 150
+                    ? course[i].courseDescription.substring(0, 150) + '...'
+                    : course[i].courseDescription
+                    %>
+                </p>
+                <p class="text-sm text-gray-500 mb-4"><strong>Duration:</strong>
+                  <%= course[i].courseDuration %>
+                </p>
+                <div class="flex gap-4">
+                  <% if (course[i].courseBrochure) { %>
+                    <a href="<%= course[i].courseBrochure %>" target="_blank"
+                      class="text-sm text-blue-600 hover:underline">📥 Brochure</a>
+                    <% } %>
+                      <% if (course[i].courseDemoVideo) { %>
+                        <a href="<%= course[i].courseDemoVideo %>" target="_blank"
+                          class="text-sm text-green-600 hover:underline">▶️ Demo Video</a>
+                        <% } %>
+                </div>
+
+                <div class="w-full flex">
+
+                  <button class="bg-blue-600 text-white p-2 m-2 w-40 rounded-lg"> <a
+                      href="/course/edit/<%= course[i]._id %>">✏️ Edit </a></button>
+
+
+                  <form action="/course/delete/<%= course[i]._id %>" method="POST"
+                    onsubmit="return confirm('Are you sure you want to delete this course?');">
+                    <button class="bg-red-600 text-white p-2 m-2 w-40 rounded-lg">🗑️ Delete</button>
+                  </form>
+                </div>
               </div>
-
-             <div class="w-full flex">
-
-    <button class="bg-blue-600 text-white p-2 m-2 w-40 rounded-lg"> <a href="/course/edit/<%= course[i]._id %>">✏️ Edit </a></button>
-
-
-  <form action="/course/delete/<%= course[i]._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');">
-    <button class="bg-red-600 text-white p-2 m-2 w-40 rounded-lg">🗑️ Delete</button>
-  </form>
-</div>
             </div>
-          </div>
-        <% } %>
-      </div>
-    <% } else { %>
-      <p class="text-red-500">🚫 No courses available.</p>
-    <% } %>
-  </div>
-</body>
+            <% } %>
+        </div>
+        <% } else { %>
+          <p class="text-red-500">🚫 No courses available.</p>
+          <% } %>
+    </div>
+  </body>
 
 </html>

@@ -51,6 +51,13 @@
       <form action="/course/update/<%= Course._id %>" method="POST" enctype="multipart/form-data">
         <div class="row">
 
+
+            <!-- Course Keyword -->
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Course Keyword</label>
+            <input type="text" name="courseKeyword" class="form-control" value="<%= Course.courseKeyword %>" required>
+          </div>
+
           <!-- Title -->
           <div class="mb-3 col-md-6">
             <label class="form-label">Course Title</label>

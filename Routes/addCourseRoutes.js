@@ -117,6 +117,7 @@ router.post('/submit-form-course', upload.fields([
 
     const newCourse = new Course({
       courseTitle: req.body.courseTitle,
+      courseKeyword: req.body.courseKeyword,
       courseUrl: courseSlug,
       courseBrochure: req.body.courseBrochure,
       courseDemoVideo: req.body.courseDemoVideo,
@@ -214,6 +215,7 @@ router.post('/update/:id', upload.fields([
 
     const updateData = {
       courseTitle: req.body.courseTitle,
+      courseKeyword: req.body.courseKeyword,
       courseUrl: courseSlug,
       courseBrochure: req.body.courseBrochure,
       courseDemoVideo: req.body.courseDemoVideo,
