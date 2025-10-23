@@ -1,7 +1,8 @@
 const express = require('express')
 const Course = require('../Models/courseModel')
 const Mentor = require('../Models/mentorModel')
-const Testimonial = require('../Models/testimonialModel')
+const Testimonial = require('../Models/testimonialModel');
+
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ const router = express.Router();
 // All Course API 
 router.get('/course', async (req, res) => {
   try {
-    const course = await Course.find({});
+    const course = await Course.find({}).populate('mentor', 'name');
     res.json({ status: true, message: "All Course Details", course });
   } catch (error) {
     console.error('Error fetching courses:', error);
