@@ -2,6 +2,7 @@ const express = require('express')
 const Course = require('../Models/courseModel')
 const Mentor = require('../Models/mentorModel')
 const Testimonial = require('../Models/testimonialModel');
+const Batch = require('../Models/batchModel')
 
 
 const router = express.Router();
@@ -21,10 +22,10 @@ router.get('/course', async (req, res) => {
 
 // Mentors API
 
-router.get('/mentor', async(req,res)=>{
+router.get('/mentor', async (req, res) => {
   try {
     const mentor = await Mentor.find({});
-    res.json({status:true, message:"All Mentor Details",mentor})
+    res.json({ status: true, message: "All Mentor Details", mentor })
   } catch (error) {
     console.error('Error fetching mentors:', error);
     res.status(500).json({ status: false, message: "Internal Server Error" });
@@ -36,16 +37,32 @@ router.get('/mentor', async(req,res)=>{
 
 // Testimonial API
 
-router.get('/testimonial', async(req,res)=>{
+router.get('/testimonial', async (req, res) => {
   try {
     const testimonial = await Testimonial.find({});
-    res.json({status:true, message:"All Testimonial Details",testimonial})
+    res.json({ status: true, message: "All Testimonial Details", testimonial })
   } catch (error) {
     console.error('Error fetching testimonials:', error);
     res.status(500).json({ status: false, message: "Internal Server Error" });
   }
 })
- 
+
+
+
+// Upcoming Batch
+
+router.get('/upcoming-batch', async (req, res) => {
+  try {
+    const upcomingBatch = await Batch.find({})
+    res.json({ status: true, message: "All Upcoming Batch Details", upcomingBatch })
+  } catch (error) {
+    console.error('Error fetching upcoming batch:', error);
+    res.status(500).json({ status: false, message: "Internal Server Error" });
+  }
+})
+
+
+
 
 
 

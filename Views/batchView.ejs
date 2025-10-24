@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>All Batch</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+  
+  <%- include('Header'); -%>
+  <div class="max-w-5xl mx-auto py-10">
+    <h1 class="text-3xl font-bold text-center mb-8 text-indigo-600">
+      Career Growth Batches
+    </h1>
+
+    <div class="text-center mb-8">
+      <a href="/batch/add" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+        ➕ Add New Batch
+      </a>
+    </div>
+
+    <% if (batches.length === 0) { %>
+      <p class="text-center text-gray-600">No batches available yet.</p>
+    <% } else { %>
+      <div class="grid md:grid-cols-3 gap-6">
+        <% batches.forEach(batch => { %>
+          <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 relative">
+            <h2 class="text-xl font-semibold text-gray-800 mb-2"><%= batch.course %></h2>
+            <p class="text-gray-600 mb-1">📅 Start Date: <%= batch.startDate %></p>
+            <p class="text-gray-600 mb-1">🗓️ Days: <%= batch.days %></p>
+            <p class="text-gray-600 mb-4">⏰ Time: <%= batch.time %></p>
+
+            <div class="absolute top-2 right-2 space-x-2 flex">
+              <!-- Edit button -->
+              <a href="/batch/edit/<%= batch._id %>" class="bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500 text-sm">
+                Edit
+              </a>
+
+              <!-- Delete button -->
+              <form action="/batch/delete/<%= batch._id %>" method="POST" onsubmit="return confirm('Delete this batch?')">
+                <button class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-sm">
+                  Delete
+                </button>
+              </form>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>

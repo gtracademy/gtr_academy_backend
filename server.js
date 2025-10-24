@@ -17,7 +17,7 @@ const session = require('express-session');
 const apiRoutes = require('./Routes/apiRoutes')
 const testimonialRoutes = require('./Routes/testimonialRoutes')
 const searchRoutes = require('./Routes/searchRoutes')
-
+const batchRoutes = require('./Routes/batchRoutes')
 
 
 // use ejs-locals for all ejs templates:
@@ -53,6 +53,8 @@ app.use('/mentor',mentorRoutes)
 app.use('/api',apiRoutes)
 app.use('/testimonial',testimonialRoutes)
 app.use('/search',searchRoutes)
+app.use('/batch',batchRoutes)
+
 
 
 
