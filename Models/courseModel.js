@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const courseSchema = new mongoose.Schema({
     courseTitle: { type: String, required: true },
      courseKeyword: { type: String, required: true },
-    courseBrochure: { type: String },
+    courseBrochure: { local: String, cloud: String },
     courseDemoVideo: { type: String },
     courseDescription: { type: String },
     courseOverview: {type:String}, 

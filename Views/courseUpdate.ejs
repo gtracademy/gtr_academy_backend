@@ -71,11 +71,17 @@
             <small class="text-muted">This slug is used in the course URL.</small>
           </div>
 
-          <!-- Brochure -->
-          <div class="mb-3 col-md-6">
-            <label class="form-label">Brochure URL</label>
-            <input type="text" name="courseBrochure" class="form-control" value="<%= Course.courseBrochure %>">
-          </div>
+       <!-- Brochure Upload -->
+<div class="mb-3 col-md-6">
+  <label class="form-label">Course Brochure (PDF/DOC)</label><br>
+  <% if (Course.courseBrochure) { %>
+    <a href="<%= Course.courseBrochure %>" target="_blank" class="btn btn-sm btn-outline-info mb-2">
+      View Current Brochure
+    </a><br>
+  <% } %>
+  <input type="file" name="courseBrochure" class="form-control" accept=".pdf,.doc,.docx">
+  <small class="text-muted">Upload a new brochure file to replace the current one.</small>
+</div>
 
           <!-- Demo Video -->
           <div class="mb-3 col-md-6">

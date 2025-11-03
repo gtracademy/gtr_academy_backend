@@ -13,6 +13,7 @@ const testimonialSchema = new mongoose.Schema({
   message: { type: String, required: true },
   imageUrl: { type: String },
   videoUrl: { type: String },
+  videoUrlTestimonial: { type: String },
   status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
   rating: {
     type: Number,
@@ -20,7 +21,7 @@ const testimonialSchema = new mongoose.Schema({
     max: 5,
     required: true, // You can change this based on whether you want to make the rating optional
     validate: {
-      validator: function(value) {
+      validator: function (value) {
         return value >= 1 && value <= 5;
       },
       message: 'Rating must be between 1 and 5.'

@@ -11,10 +11,8 @@ router.get('/', async (req, res) => {
   res.render('testimonialUser', { testimonials });
 });
 
-// 📝 Submit Form
-// router.get('/testimonial-submit', (req, res) => {
-//   res.render('submit');
-// });
+
+
 
 // ✅ Create Testimonial
 router.post('/submit', upload.fields([
@@ -22,7 +20,7 @@ router.post('/submit', upload.fields([
   { name: 'video', maxCount: 1 }
 ]), async (req, res) => {
   try {
-    const { name, company, salary, message, course, rating } = req.body;
+    const { name, company, salary, message, course, rating,videoUrlTestimonial } = req.body;
 
     // Ensure rating is between 1 and 5
     const parsedRating = parseInt(rating);
@@ -42,6 +40,7 @@ router.post('/submit', upload.fields([
       rating: parsedRating,  // Save the rating value
       imageUrl,
       videoUrl,
+      videoUrlTestimonial,
       status: 'pending'
     });
 
@@ -81,9 +80,9 @@ router.post('/admin/edit/:id', upload.fields([
   { name: 'image', maxCount: 1 },
   { name: 'video', maxCount: 1 }
 ]), async (req, res) => {
-  const { name, company, salary, message, course, status, rating } = req.body;
+  const { name, company, salary, message, course, status, rating,videoUrlTestimonial } = req.body;
 
-  const updateData = { name, company, salary, message, course, status, rating };
+  const updateData = { name, company, salary, message, course, status, rating,videoUrlTestimonial };
 
   // Ensure rating is between 1 and 5
   const parsedRating = parseInt(rating);
