@@ -133,6 +133,10 @@ router.post('/submit-form-course', upload.fields([
         online: onlineDiscount,
         offline: offlineDiscount
       },
+        razorpayURL: {
+        online: String(req.body.razorpayURL?.online),
+        offline: String(req.body.razorpayURL?.offline)
+      },
       courseCategory: finalCategory,
       courseImage: {
         local: null,
@@ -230,6 +234,10 @@ router.post('/update/:id', upload.fields([
       courseDiscount: {
         online: Number(req.body.courseDiscount?.online || 0),
         offline: Number(req.body.courseDiscount?.offline || 0)
+      },
+       razorpayURL: {
+        online: String(req.body.razorpayURL?.online),
+        offline: String(req.body.razorpayURL?.offline)
       },
       courseCategory: req.body.courseCategory,
       mentor: req.body.mentor,

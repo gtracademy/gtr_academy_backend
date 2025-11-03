@@ -23,6 +23,10 @@ const courseSchema = new mongoose.Schema({
         online: { type: Number, default: 0 },  
         offline: { type: Number, default: 0 }   
     },
+    razorpayURL: {
+        online: { type: String, required: true },   
+        offline: { type: String, required: true }   
+    },
     courseCategory: { type: String },
     courseImage: {
         local: String,
